@@ -7,14 +7,14 @@
 	}
 
 	function onChange(e) {
-		// const res = readFile.init(e);
-		// console.log('res', res);
-		// if (res?.invalidFile) setError(res.invalidFile);
+		const res = readFile.init(e);
+		console.log('res', res);
+		if (res?.invalidFile) setError(res.invalidFile);
 
-		const data = fetch('/backend/read', {method: "GET"})
-		data.then((res) => {
-			console.log('res', res);
-		})
+		// const data = fetch('/backend/read', {method: "GET"})
+		// data.then((res) => {
+		// 	console.log('res', res);
+		// })
 	}
 
 	function setError(res) {
