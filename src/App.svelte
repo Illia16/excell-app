@@ -1,10 +1,33 @@
 <script>
-	export let name;
+	export let name, data, userInput, error;
+	import readFile from './readFile';
+
+	function add() {
+		name = userInput;
+	}
+
+	function onChange(e) {
+		// const res = readFile.init(e);
+		// console.log('res', res);
+		// if (res?.invalidFile) setError(res.invalidFile);
+
+		const data = fetch('/backend/read', {method: "GET"})
+		console.log('data', data);
+	}
+
+	function setError(res) {
+		error = res;
+	}
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<!-- <input type="text" bind:value={userInput}> -->
+	<input type="file" name="file" id="file" bind:value={data} on:change={onChange}>
+	<!-- <button on:click={add} >Add to array</button> -->
+	{#if error}
+	 <div>Wrong file fomat!</div>
+	{/if}
 </main>
 
 <style>
