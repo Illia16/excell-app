@@ -26,8 +26,7 @@ module.exports = {
 		console.log('data', data);
 		var xlsx = require('xlsx');
 		console.log('xlsx', xlsx);
-        // var file = xlsx.readFile('../text.xlsx');
-        var file = xlsx.read(data.path);
+        var file = xlsx.readFile('../text.xlsx');
 		console.log('file', file);
 
         // var data = [];
@@ -59,3 +58,29 @@ module.exports = {
         // reader.readAsArrayBuffer(f);
     },
 }
+
+
+var readExcellFile = function(data) {
+    var xlsx = require('xlsx');
+    console.log('this', this);
+    console.log('__dirname', __dirname);
+    const fileLocation =  __dirname.replace('src', 'test.xlsx');
+    var file = xlsx.readFile(fileLocation);
+    console.log('file', file);
+
+    var data = [];
+    var sheets = file.SheetNames;
+    console.log('sheets', sheets);
+    console.log('xlsx.utils', xlsx.utils);
+
+    for (let i = 0; i < sheets.length; i++) {
+        var getData = xlsx.utils.sheet_to_json(file.Sheets[file.SheetNames[i]]);
+        getData.forEach((res) => {
+            data.push(res)
+        });
+    }
+
+    console.log('data', data)
+};
+
+readExcellFile();

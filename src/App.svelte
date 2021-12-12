@@ -12,7 +12,9 @@
 		// if (res?.invalidFile) setError(res.invalidFile);
 
 		const data = fetch('/backend/read', {method: "GET"})
-		console.log('data', data);
+		data.then((res) => {
+			console.log('res', res);
+		})
 	}
 
 	function setError(res) {
