@@ -1,20 +1,21 @@
 <script>
 	export let name, data, userInput, error;
 	import readFile from './readFile';
+	const url = `http://localhost:5001/dev/backend/read`;
 
-	function add() {
+	function add(e) {
+		console.log('e', e.target.files[0]);
+		const file = e.target.files[0];
+		const formData = new FormData();
+		formData.append('file', file);
+
 		name = userInput;
-	}
-
-	function onChange(e) {
-		const res = readFile.init(e);
-		console.log('res', res);
-		if (res?.invalidFile) setError(res.invalidFile);
-
-		// const data = fetch('/backend/read', {method: "GET"})
-		// data.then((res) => {
-		// 	console.log('res', res);
-		// })
+		const data = fetch(url, { mode: 'cors', method: "POST", body: formData})
+		data
+		.then(res => res.json())
+		.then(data => {
+			console.log('data!', data);
+		})
 	}
 
 	function setError(res) {
@@ -24,9 +25,7 @@
 
 <main>
 	<h1>Hello {name}!</h1>
-	<!-- <input type="text" bind:value={userInput}> -->
-	<input type="file" name="file" id="file" bind:value={data} on:change={onChange}>
-	<!-- <button on:click={add} >Add to array</button> -->
+	<input type="file" name="file" id="file" bind:value={data} on:change={add}>
 	{#if error}
 	 <div>Wrong file fomat!</div>
 	{/if}

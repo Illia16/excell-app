@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "electron ."
+    "start": "sirv public --no-clear"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "electron": "^16.0.4",
+    "express": "^4.17.2",
     "rollup": "^2.61.1",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
@@ -32,7 +33,10 @@
     "xlsx": "^0.17.4"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "electron-reload": "^2.0.0-alpha.1",
+    "parse-multipart-data": "^1.2.1",
+    "serverless-offline": "^8.3.1",
     "sirv-cli": "^1.0.0"
   }
 }

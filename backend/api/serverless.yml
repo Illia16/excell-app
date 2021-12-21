@@ -1,0 +1,40 @@
+# Welcome to Serverless!
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: excellApp-api
+
+plugins:
+  - serverless-offline # Allow local hosting via `serverless offline`
+
+provider:
+  name: aws # this has to be hardcoded
+  stage: dev
+  region: us-east-1
+  profile: personal
+  # apiGateway: ${file(../serverless.common.yml):custom.apiGateway.api}
+  # deploymentBucket:
+  #   us-east-1:
+  #     name: ${file(../serverless.common.yml):provider.deploymentBucket.${self:provider.region}.name}
+  runtime: nodejs14.x
+
+custom:
+  serverless-offline:
+    allowCache: false
+
+functions:
+  read:
+    name: excellApp-read-dev
+    handler: read/index.handler
+    description: API function to read
+    memorySize: 128
+    timeout: 28
+    events:
+      - http:
+          path: backend/read
+          method: post
+          cors: true
+
+
+# resources for cloudfront (CloudFormation template for CloudFront)

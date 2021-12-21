@@ -33369,7 +33369,7 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file = "src/App.svelte";
 
-    // (30:1) {#if error}
+    // (29:1) {#if error}
     function create_if_block(ctx) {
     	let div;
 
@@ -33377,7 +33377,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			div.textContent = "Wrong file fomat!";
-    			add_location(div, file, 30, 2, 684);
+    			add_location(div, file, 29, 2, 669);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -33391,7 +33391,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(30:1) {#if error}",
+    		source: "(29:1) {#if error}",
     		ctx
     	});
 
@@ -33423,13 +33423,13 @@ var app = (function () {
     			t4 = space();
     			if (if_block) if_block.c();
     			attr_dev(h1, "class", "svelte-1tky8bj");
-    			add_location(h1, file, 25, 1, 455);
+    			add_location(h1, file, 26, 1, 554);
     			attr_dev(input, "type", "file");
     			attr_dev(input, "name", "file");
     			attr_dev(input, "id", "file");
-    			add_location(input, file, 27, 1, 532);
+    			add_location(input, file, 27, 1, 578);
     			attr_dev(main, "class", "svelte-1tky8bj");
-    			add_location(main, file, 24, 0, 447);
+    			add_location(main, file, 25, 0, 546);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -33448,7 +33448,7 @@ var app = (function () {
     			if (!mounted) {
     				dispose = [
     					listen_dev(input, "change", /*input_change_handler*/ ctx[5]),
-    					listen_dev(input, "change", /*onChange*/ ctx[3], false, false, false)
+    					listen_dev(input, "change", /*add*/ ctx[3], false, false, false)
     				];
 
     				mounted = true;
@@ -33493,20 +33493,26 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
     	let { name, data, userInput, error } = $$props;
+    	const url = `http://localhost:5001/dev/backend/read`;
 
-    	function add() {
+    	function add(e) {
+    		console.log('e', e.target.files[0]);
+    		const file = e.target.files[0];
+    		const formData = new FormData();
+    		formData.append('file', file);
     		$$invalidate(0, name = userInput);
+
+    		const data = fetch(url, {
+    			mode: 'cors',
+    			method: "POST",
+    			body: formData
+    		});
+
+    		data.then(res => res.json()).then(data => {
+    			console.log('data!', data);
+    		});
     	}
 
-    	function onChange(e) {
-    		const res = readFile.init(e);
-    		console.log('res', res);
-    		if (res?.invalidFile) setError(res.invalidFile);
-    	} // const data = fetch('/backend/read', {method: "GET"})
-    	// data.then((res) => {
-
-    	// 	console.log('res', res);
-    	// })
     	function setError(res) {
     		$$invalidate(2, error = res);
     	}
@@ -33535,8 +33541,8 @@ var app = (function () {
     		userInput,
     		error,
     		readFile,
+    		url,
     		add,
-    		onChange,
     		setError
     	});
 
@@ -33551,7 +33557,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [name, data, error, onChange, userInput, input_change_handler];
+    	return [name, data, error, add, userInput, input_change_handler];
     }
 
     class App extends SvelteComponentDev {

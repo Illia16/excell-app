@@ -2,3 +2,5 @@
 node_modules/
 ~$text.xlsx
 .DS_Store
+
+.env.dev
