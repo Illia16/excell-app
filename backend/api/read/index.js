@@ -1,34 +1,31 @@
 var xlsx = require('xlsx');
-var multipart = require('parse-multipart-data');
+const XlsxPopulate = require('xlsx-populate');
 
-module.exports.handler = async function(event, context) {
-    const file = xlsx.read(event.body);
-    console.log('event.body', event.body);
-    console.log('event.header', event.headers);
-    // const body = Buffer.from(event.body, 'base64')
-    const body = Buffer.from(event.body.trim().replace(/\n/g, '\r\n'))
-    console.log('body', body);
+module.exports.handler = async function() {
+    const filePath = __dirname.replace('api/read', 'files/test.xlsx')
 
-    const parts = multipart.parse(body, multipart.getBoundary(event.headers["Content-Type"]));
-    console.log('parts', parts);
-    console.log('parts.length', parts.length);
-    console.log('boundary', event.headers["Content-Type"].split('=')[1]);
+    try {
+        const data = await xlsx.readFile(filePath);
+        var sheets = data.SheetNames;
 
-    var data = [];
-    var sheets = file.SheetNames;
-
-    for (let i = 0; i < sheets.length; i++) {
-        var getData = xlsx.utils.sheet_to_json(file.Sheets[file.SheetNames[i]]);
-        getData.forEach((res) => {
-            data.push(res)
+        const res = []
+        await XlsxPopulate.fromFileAsync(filePath)
+        .then(workbook => {
+            for (let i = 0; i < sheets.length; i++) {
+                res.push({year: sheets[i], data: workbook.sheet(sheets[i]).usedRange().value()})
+            };
         });
-    }
 
-    return {
-        statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*'
-        },
-        body: JSON.stringify(data),
-    };
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(res),
+        };
+
+       } catch(err) {
+        console.log('err', err);
+        process.exit(1);
+       }
 }

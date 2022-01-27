@@ -1,8 +1,3 @@
-# Welcome to Serverless!
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-
 service: excellApp-api
 
 plugins:
@@ -13,10 +8,6 @@ provider:
   stage: dev
   region: us-east-1
   profile: personal
-  # apiGateway: ${file(../serverless.common.yml):custom.apiGateway.api}
-  # deploymentBucket:
-  #   us-east-1:
-  #     name: ${file(../serverless.common.yml):provider.deploymentBucket.${self:provider.region}.name}
   runtime: nodejs14.x
 
 custom:
@@ -35,6 +26,3 @@ functions:
           path: backend/read
           method: post
           cors: true
-
-
-# resources for cloudfront (CloudFormation template for CloudFront)

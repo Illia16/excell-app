@@ -4,9 +4,9 @@ const app = new App({
 	target: document.body,
 	props: {
 		name: 'world',
-		userInput: '',
-		data: [],
+		data: '',
 		error: false,
+		displayData: false,
 	}
 });
 

@@ -1,54 +1,61 @@
 <script>
-	export let name, data, userInput, error;
-	import readFile from './readFile';
-	const url = `http://localhost:5001/dev/backend/read`;
+  import DisplayedData from "./DisplayedData.svelte";
 
-	function add(e) {
-		console.log('e', e.target.files[0]);
-		const file = e.target.files[0];
-		const formData = new FormData();
-		formData.append('file', file);
+  export let name, data, displayData, error;
+  const url = `http://localhost:5001/dev/backend/read`;
 
-		name = userInput;
-		const data = fetch(url, { mode: 'cors', method: "POST", body: formData})
-		data
-		.then(res => res.json())
-		.then(data => {
-			console.log('data!', data);
-		})
-	}
+  function add(e) {
+    console.log("e", e.target.files[0]);
 
-	function setError(res) {
-		error = res;
-	}
+    fetch(url, { mode: "cors", method: "POST", body: e.name })
+      .then((res) => res.json())
+      .then((res) => {
+        data = res;
+      });
+  }
+
+  function setError(res) {
+    error = res;
+  }
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<input type="file" name="file" id="file" bind:value={data} on:change={add}>
-	{#if error}
-	 <div>Wrong file fomat!</div>
-	{/if}
+  <h1>Hello {name}!</h1>
+  <input type="file" name="file" id="file" bind:value={data} on:change={add} />
+  {#if error}
+    <div>Wrong file fomat!</div>
+  {/if}
+
+  {#if data && data.length}
+    <div>data is here!</div>
+    {#each data as entry}
+        <h2>year {entry.year}</h2>
+    {/each}
+  {/if}
+  <button on:click={() => (displayData = !displayData)}>Show/Hide Data</button>
+  {#if displayData}
+    <DisplayedData />
+  {/if}
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+  main {
+    text-align: center;
+    padding: 1em;
+    max-width: 240px;
+    margin: 0 auto;
+  }
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+  h1 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em;
+    font-weight: 100;
+  }
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
 </style>
